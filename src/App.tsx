@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createContext } from "react";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles } from "./Global.styled";
+import { useDarkMode } from "./hooks/useDarkTheme";
+import { lightTheme, darkTheme } from "./Theme.styled";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Context } from "./interface/Context";
+
+import Navbar from "./components/Navbar";
+import Homepage from "./views/Homepage";
+import CountryDetails from "./views/CountryDetails";
+
+export const ThemeContext = createContext<Context>({} as Context);
 
 function App() {
+  const [theme, toggleTheme, mountedComponent] = useDarkMode();
+
+  if (!mountedComponent) return <div />;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+          <GlobalStyles />
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="country/:name" element={<CountryDetails />} />
+          </Routes>
+        </ThemeContext.Provider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
