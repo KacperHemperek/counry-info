@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
-const StyledInputWrapper = styled.form`
+const StyledInputWrapper = styled.div`
   background-color: ${({ theme }) => theme.neutral.elements};
   box-shadow: ${({ theme }) => theme.boxShadow};
   padding-left: 2rem;
